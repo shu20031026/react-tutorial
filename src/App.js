@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { getLanguages } from "./const/languages";
-import { Form } from "./Form";
+import { Form } from "./Form.js";
 import { List } from "./List";
 import { withLoading } from "./hoc/withLoading";
 import { Modal } from "./components/modal";
