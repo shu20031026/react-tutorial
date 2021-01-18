@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getLanguages } from "./const/languages";
 import { Form } from "./Form";
 import { List } from "./List";
+import { withLoading } from "./hoc/withLoading";
 
 const Header = styled.header`
   display: flex;
@@ -24,19 +25,9 @@ const HeaderLi = styled.li`
   border-bottom: ${(props) => (props.focused ? "2px solid #F44336" : "none")};
 `;
 
-function App() {
+function App({ data }) {
   const [tab, setTab] = useState("list");
-  const [langs, setLangs] = useState([]);
-
-  useEffect(() => {
-    console.log("App.js:useEffect");
-    fetchLanguages();
-  }, []);
-
-  const fetchLanguages = async () => {
-    const languages = await getLanguages();
-    setLangs(languages);
-  };
+  const [langs, setLangs] = useState(data);
 
   const addLang = (lang) => {
     setLangs([...langs, lang]);
@@ -60,4 +51,4 @@ function App() {
   );
 }
 
-export default App;
+export default withLoading(App, getLanguages);
