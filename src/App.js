@@ -1,34 +1,23 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getLanguages } from "./const/languages";
 import { Form } from "./Form.js";
 import { List } from "./List";
 import { withLoading } from "./hoc/withLoading";
-import { Modal } from "./components/modal";
+import { Header } from "./Header";
+import { ThemeContext } from "./contexts/ThemeContext";
 
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  padding: 24px 64px 0;
-  border-bottom: 1px solid #e0e0e0;
-`;
-
-const HeaderUl = styled.ul`
-  display: flex;
-  margin: 0;
-  padding: 0;
-`;
-
-const HeaderLi = styled.li`
-  list-style: none;
-  padding: 4px 12px;
-  cursor: pointer;
-  border-bottom: ${(props) => (props.focused ? "2px solid #F44336" : "none")};
+const Container = styled.div`
+  height: 100%;
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.backgroundColor};
 `;
 
 function App({ data }) {
   const [tab, setTab] = useState("list");
   const [langs, setLangs] = useState(data);
+
+  const [theme] = useContext(ThemeContext);
 
   const addLang = (lang) => {
     setLangs([...langs, lang]);
@@ -36,21 +25,12 @@ function App({ data }) {
   };
 
   return (
-    <div>
-      <Header>
-        <HeaderUl>
-          <HeaderLi focused={tab === "list"} onClick={() => setTab("list")}>
-            リスト
-          </HeaderLi>
-          <HeaderLi focused={tab === "form"} onClick={() => setTab("form")}>
-            フォーム
-          </HeaderLi>
-        </HeaderUl>
-      </Header>
+    <Container theme={theme}>
+      <Header tab={tab} setTab={setTab} />
       {tab === "list" ? <List langs={langs} /> : <Form onAddLang={addLang} />}
       {/* <Modal /> */}
-    </div>
+    </Container>
   );
 }
 
-export default withLoading(App, getLanguages);
+export default App;
